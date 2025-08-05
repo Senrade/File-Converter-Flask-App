@@ -4,9 +4,10 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 import pandas as pd
 from pdf2image import convert_from_path
-import pdfplumber
+from pdf2docx import Converter
 from docx import Document
 from docx2pdf import convert as docx_to_pdf
+from fpdf import FPDF
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
@@ -15,36 +16,39 @@ app.config['CONVERTED_FOLDER'] = 'converted'
 # Allowed input formats
 ALLOWED_EXTENSIONS = {'pdf', 'csv', 'xlsx', 'txt', 'png', 'jpg', 'jpeg', 'docx'}
 
-# Logic conversions
+# Valid conversions map
 VALID_CONVERSIONS = {
     'pdf':   ['txt', 'png', 'jpg', 'docx'],
     'csv':   ['pdf', 'xlsx', 'txt'],
     'xlsx':  ['pdf', 'csv', 'txt'],
-    'txt':   ['pdf', 'csv', 'xlsx', 'docx'],
-    'png':   ['jpg'],
-    'jpg':   ['png'],
-    'jpeg':  ['png'],
+    'txt':   ['pdf', 'docx'],
+    'png':   ['jpg', 'pdf'],
+    'jpg':   ['png', 'pdf'],
+    'jpeg':  ['png', 'pdf'],
     'docx':  ['pdf', 'txt']
 }
 
-# --- Utility functions ---
-
+# ----------------- Utility Functions -----------------
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def pdf_to_txt(input_path, output_path):
-    """Extract text from PDF into a TXT file."""
+    from PyPDF2 import PdfReader
     text = ""
-    with pdfplumber.open(input_path) as pdf:
-        for page in pdf.pages:
-            extracted = page.extract_text()
-            if extracted:
-                text += extracted + "\n"
+    reader = PdfReader(input_path)
+    for page in reader.pages:
+        extracted = page.extract_text()
+        if extracted:
+            text += extracted + "\n"
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(text)
 
+def pdf_to_docx(input_path, output_path):
+    cv = Converter(input_path)
+    cv.convert(output_path, start=0, end=None)
+    cv.close()
+
 def txt_to_docx(input_path, output_path):
-    """Convert plain text file to a Word document."""
     with open(input_path, "r", encoding="utf-8") as f:
         text = f.read()
     doc = Document()
@@ -53,87 +57,99 @@ def txt_to_docx(input_path, output_path):
     doc.save(output_path)
 
 def docx_to_txt(input_path, output_path):
-    """Extract text from a Word document into TXT."""
     doc = Document(input_path)
     full_text = "\n".join([p.text for p in doc.paragraphs])
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(full_text)
 
-def pdf_to_docx(input_path, output_path):
-    """Convert PDF text to Word document (layout not preserved)."""
-    doc = Document()
-    with pdfplumber.open(input_path) as pdf:
-        for page in pdf.pages:
-            extracted = page.extract_text()
-            if extracted:
-                doc.add_paragraph(extracted)
-    doc.save(output_path)
+def txt_to_pdf(input_path, output_path):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Times", size=12)
 
+    with open(input_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            pdf.ln(6)
+            continue
+        if stripped.isupper() and len(stripped) <= 60:
+            pdf.set_font("Times", style="B", size=14)
+            pdf.multi_cell(0, 8, stripped, align="C")
+            pdf.ln(4)
+            pdf.set_font("Times", size=12)
+        else:
+            pdf.multi_cell(0, 6, stripped)
+
+    pdf.output(output_path)
+
+def images_to_pdf(input_path, output_path):
+    img = Image.open(input_path).convert("RGB")
+    img.save(output_path, "PDF", resolution=100.0)
+
+# ----------------- Conversion Handler -----------------
 def convert_file(input_path, output_path, input_ext, output_ext):
-    """
-    Handle file conversion by type pairing.
-    Each branch uses the right library to avoid NoneType errors.
-    """
-
-    # --- PDF conversions ---
+    # PDF conversions
     if input_ext == 'pdf' and output_ext == 'txt':
         pdf_to_txt(input_path, output_path)
-
     elif input_ext == 'pdf' and output_ext in ['png', 'jpg']:
         images = convert_from_path(input_path)
         if images:
             images[0].save(output_path, output_ext.upper())
-
     elif input_ext == 'pdf' and output_ext == 'docx':
         pdf_to_docx(input_path, output_path)
 
-    # --- DOCX conversions ---
+    # DOCX conversions
     elif input_ext == 'docx' and output_ext == 'txt':
         docx_to_txt(input_path, output_path)
-
     elif input_ext == 'docx' and output_ext == 'pdf':
-        # docx2pdf writes to same directory
         temp_dir = os.path.dirname(output_path)
         os.makedirs(temp_dir, exist_ok=True)
         docx_to_pdf(input_path, temp_dir)
         generated_pdf = os.path.join(temp_dir, os.path.splitext(os.path.basename(input_path))[0] + ".pdf")
         os.rename(generated_pdf, output_path)
 
-    # TXT to DOCX
+    # TXT conversions
     elif input_ext == 'txt' and output_ext == 'docx':
         txt_to_docx(input_path, output_path)
+    elif input_ext == 'txt' and output_ext == 'pdf':
+        txt_to_pdf(input_path, output_path)
 
-    # --- CSV / XLSX / TXT conversions ---
-    elif input_ext in ['csv', 'xlsx', 'txt'] and output_ext in ['csv', 'xlsx', 'pdf', 'txt']:
+    # CSV/XLSX conversions
+    elif input_ext in ['csv', 'xlsx'] and output_ext in ['csv', 'xlsx', 'pdf', 'txt']:
         if input_ext == 'csv':
-            df = pd.read_csv(input_path, encoding='utf-8')
+            df = pd.read_csv(input_path, encoding="utf-8")
         elif input_ext == 'xlsx':
             df = pd.read_excel(input_path)
-        elif input_ext == 'txt' and output_ext != 'docx':  # exclude txt->docx handled earlier
-            df = pd.read_csv(input_path, sep="\t", engine="python")
-
         if output_ext == 'csv':
-            df.to_csv(output_path, index=False, encoding='utf-8')
+            df.to_csv(output_path, index=False, encoding="utf-8")
         elif output_ext == 'xlsx':
             df.to_excel(output_path, index=False)
+        elif output_ext == 'txt':
+            df.to_csv(output_path, sep="\t", index=False, encoding="utf-8")
         elif output_ext == 'pdf':
             html = df.to_html(index=False)
-            with open("temp.html", "w", encoding="utf-8") as f:
-                f.write(html)
-            os.rename("temp.html", output_path)  # Placeholder for PDF generation
-        elif output_ext == 'txt':
-            df.to_csv(output_path, sep="\t", index=False, encoding='utf-8')
+            pdf = FPDF()
+            pdf.add_page()
+            pdf.set_font("Arial", size=8)
+            for line in html.splitlines():
+                pdf.multi_cell(0, 5, line)
+            pdf.output(output_path)
 
-    # --- Image conversions ---
+    # Image conversions
     elif input_ext in ['png', 'jpg', 'jpeg'] and output_ext in ['png', 'jpg']:
         img = Image.open(input_path)
         img.save(output_path)
+    elif input_ext in ['png', 'jpg', 'jpeg'] and output_ext == 'pdf':
+        images_to_pdf(input_path, output_path)
 
     else:
         raise ValueError("Unsupported conversion requested.")
 
-# --- Routes ---
-
+# ----------------- Routes -----------------
 @app.route('/')
 def index():
     return render_template('index.html')
