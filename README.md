@@ -8,10 +8,10 @@ Works on desktop, tablet, and mobile.
 
 ## Features
 - **Supported input formats:** `pdf`, `csv`, `xlsx`, `txt`, `png`, `jpg`, `docx`
-- **Smart conversion rules** — only valid format pairs are allowed (e.g., PNG → TXT is blocked)
+- **Smart conversion rules** - only valid format pairs are allowed (e.g., PNG → TXT is blocked)
 - **Drag & drop** or click to upload
-- **Dynamic format selection** — output list updates based on uploaded file type
-- **Responsive UI** — optimized for different screen sizes
+- **Dynamic format selection** - output list updates based on uploaded file type
+- **Responsive UI** - optimized for different screen sizes
 
 ---
 
@@ -23,7 +23,7 @@ git clone https://github.com/Senrade/File-Converter-Flask-App.git
 cd File-Converter-Flask-App
 ```
 
-2. Create and activate a virtual environment
+### 2. Create and activate a virtual environment
 ```bash
     python -m venv venv
 ```
@@ -42,7 +42,7 @@ cd File-Converter-Flask-App
     You should see (venv) at the start of your terminal prompt.
   ```
 
-3. Install dependencies
+### 3. Install dependencies
    ```bash
    pip install -r requirements.txt
    ```
@@ -51,12 +51,12 @@ cd File-Converter-Flask-App
 
 ## USAGE
 
-1. Run the application
+### 1. Run the application
     ```bash
     python app.py
     ```
 
-2. Access in browser
+### 2. Access in browser
 Open either URL as needed.
 
     * Running on http://127.0.0.1:5000        # Localhost, accessible only from this machine
