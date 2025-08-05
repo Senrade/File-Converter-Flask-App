@@ -10,6 +10,18 @@ A lightweight Flask web application for converting files between multiple format
 - **Responsive design** for desktop and mobile
 
 ---
+## Visual
+
+### Desktop View
+![Desktop Screenshot](screenshots/desktop-view.png)
+
+### Tablet View
+![Tablet Screenshot](screenshots/tablet-view.png)
+
+### Mobile View
+![Mobile Screenshot](screenshots/mobile-view.png)
+
+---
 
 ## Installation
 
