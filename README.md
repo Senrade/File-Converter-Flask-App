@@ -1,13 +1,17 @@
 # File Converter (Flask)
 
-A lightweight Flask web application for converting files between multiple formats with built‑in validation to prevent invalid conversions.
+A simple, browser‑based file converter built with Flask.  
+Upload a file, choose an available output format, and get your converted file instantly.  
+Works on desktop, tablet, and mobile.
 
-## Supported Features
+---
+
+## Features
 - **Supported input formats:** `pdf`, `csv`, `xlsx`, `txt`, `png`, `jpg`, `docx`
-- **Conversion rules** enforce only valid source–target pairs (e.g., PNG → TXT is blocked)
-- **Drag & Drop** file upload with click fallback
-- **Dynamic output format list** based on uploaded file type
-- **Responsive design** for desktop and mobile
+- **Smart conversion rules** — only valid format pairs are allowed (e.g., PNG → TXT is blocked)
+- **Drag & drop** or click to upload
+- **Dynamic format selection** — output list updates based on uploaded file type
+- **Responsive UI** — optimized for different screen sizes
 
 ---
 
@@ -15,8 +19,8 @@ A lightweight Flask web application for converting files between multiple format
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/file-converter.git
-cd file-converter
+git clone https://github.com/Senrade/File-Converter-Flask-App.git
+cd File-Converter-Flask-App
 ```
 
 2. Create and activate a virtual environment
@@ -25,6 +29,7 @@ cd file-converter
 ```
 
 - Activate:
+  ```bash
     #In MacOS or Linux
     source venv/bin/activate
 
@@ -34,31 +39,33 @@ cd file-converter
     #If using Powershell, doing the same in your IDE as well
     venv\Scripts\Activate.ps1
 
-    you should see "(venv)" before your current directory.
+    You should see (venv) at the start of your terminal prompt.
+  ```
 
 3. Install dependencies
-
-    pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ---
 
 ## USAGE
 
 1. Run the application
-
+    ```bash
     python app.py
+    ```
 
 2. Access in browser
+Open either URL as needed.
 
     * Running on http://127.0.0.1:5000        # Localhost, accessible only from this machine
-    * Running on http://192.168.100.5:5000    # LAN IP, accessible from devices on the same network
-
-    Open either URL as needed.
+    * Running on http://<your-local-ip>:5000    # LAN IP, accessible from devices on the same network
 
 ---
 
 ## Project Structure
-
+```
 file_converter/
 │
 ├── app.py
@@ -70,7 +77,7 @@ file_converter/
 │   └── script.js
 └── templates/
     └── index.html
-
+```
 ---
 
 ## License
