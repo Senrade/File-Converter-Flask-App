@@ -8,6 +8,7 @@ from pdf2docx import Converter
 from docx import Document
 from docx2pdf import convert as docx_to_pdf
 from fpdf import FPDF
+import PyPDF2
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads'
