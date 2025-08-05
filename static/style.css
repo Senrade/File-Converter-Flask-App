@@ -1,0 +1,131 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom right, #7fa7ff, #ffffff);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.navbar {
+    background: #007BFF;
+    padding: 10px 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    line-height: 1.4;
+}
+
+.nav-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.nav-subtitle {
+    font-size: 14px;
+    opacity: 0.9;
+    display: block;
+}
+
+.container {
+    flex: 1;
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.message {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+#format_hint {
+    font-size: 13px;
+    color: #666;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+button {
+    background: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Drag & Drop */
+#dropArea {
+    padding: 30px;
+    border: 2px dashed #aaa;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+#dropArea.highlight {
+    background-color: #e6f7ff;
+    border-color: #007BFF;
+}
+
+#dropMessage {
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+}
+
+.footer {
+    margin-top: 30px;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #777;
+    border-top: 1px solid #ddd;
+    line-height: 1;
+}
+.footer a {
+    color: #007BFF;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}

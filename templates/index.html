@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='icon-logo.png') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <span class="nav-title">File Converter</span>
+            <span class="nav-subtitle">Convert files easily in your browser</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>File Converter</h1>
+
+        <div id="message_container"></div>
+
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <div id="dropArea">
+                <p id="dropMessage">
+                    Drag & Drop your file here or click to select<br>
+                    <small>Supported: pdf, csv, xlsx, txt, png, jpg, jpeg, docx</small>
+                </p>
+                <input type="file" name="file" id="fileInput" hidden required>
+            </div>
+
+            <label for="format">Convert to:</label>
+            <select name="format" id="formatSelect" required>
+                <option value="">Select output format</option>
+            </select>
+            <div id="format_hint"></div>
+
+            <button type="submit">Convert</button>
+        </form>
+    </div>
+
+    <footer class="footer">
+        <p>Built by <a href="https://github.com/Senrade" target="_blank">Senrade</a> © 2025</p>
+        <p>Powered by <a href="https://flask.palletsprojects.com/" target="_blank">Flask</a></p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

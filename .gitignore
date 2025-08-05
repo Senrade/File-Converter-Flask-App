@@ -1,0 +1,30 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+
+# Local environment variables or configs
+*.env
+
+# Uploaded and generated files
+uploads/
+*.pdf
+*.csv
+*.xlsx
+*.txt
+*.png
+*.jpg
+*.jpeg
+*.docx
+
+# OS / Editor-specific files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
