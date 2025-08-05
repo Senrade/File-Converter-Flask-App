@@ -8,10 +8,10 @@ Works on desktop, tablet, and mobile.
 
 ## Features
 - **Supported input formats:** `pdf`, `csv`, `xlsx`, `txt`, `png`, `jpg`, `docx`
-- **Smart conversion rules** - only valid format pairs are allowed (e.g., PNG → TXT is blocked)
+- **Smart conversion rules** - only valid format pairs are allowed (e.g., PNG -> TXT is blocked)
 - **Drag & drop** or click to upload
 - **Dynamic format selection** - output list updates based on uploaded file type
-- **Responsive UI** - optimized for different screen sizes
+- **Responsive UI** - optimized for different screen sizes (maybe)
 
 ---
 
@@ -38,9 +38,8 @@ cd File-Converter-Flask-App
 
     #If using Powershell, doing the same in your IDE as well
     venv\Scripts\Activate.ps1
-
-    You should see (venv) at the start of your terminal prompt.
   ```
+  You should see (venv) at the start of your terminal prompt.
 
 ### 3. Install dependencies
    ```bash
@@ -52,14 +51,14 @@ cd File-Converter-Flask-App
 ## USAGE
 
 ### 1. Run the application
-    ```bash
-    python app.py
-    ```
+   ```bash
+   python app.py
+   ```
 
 ### 2. Access in browser
 Open either URL as needed.
 
-    * Running on http://127.0.0.1:5000        # Localhost, accessible only from this machine
+    * Running on http://127.0.0.1:5000          # Localhost, accessible only from this machine
     * Running on http://<your-local-ip>:5000    # LAN IP, accessible from devices on the same network
 
 ---
